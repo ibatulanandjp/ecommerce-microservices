@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.ibatulanand.orderservice.OrderServiceApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 9.104 s - in com.ibatulanand.orderservice.OrderServiceApplicationTests

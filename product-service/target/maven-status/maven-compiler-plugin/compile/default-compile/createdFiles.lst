@@ -1,0 +1,10 @@
+com\ibatulanand\productservice\dto\ProductRequest.class
+com\ibatulanand\productservice\repository\ProductRepository.class
+com\ibatulanand\productservice\controller\ProductController.class
+com\ibatulanand\productservice\model\Product.class
+com\ibatulanand\productservice\service\ProductService.class
+com\ibatulanand\productservice\ProductServiceApplication.class
+com\ibatulanand\productservice\dto\ProductResponse.class
+com\ibatulanand\productservice\dto\ProductRequest$ProductRequestBuilder.class
+com\ibatulanand\productservice\model\Product$ProductBuilder.class
+com\ibatulanand\productservice\dto\ProductResponse$ProductResponseBuilder.class

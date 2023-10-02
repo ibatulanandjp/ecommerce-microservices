@@ -1,0 +1,5 @@
+com\ibatulanand\inventoryservice\controller\InventoryController.class
+com\ibatulanand\inventoryservice\InventoryServiceApplication.class
+com\ibatulanand\inventoryservice\service\InventoryService.class
+com\ibatulanand\inventoryservice\model\Inventory.class
+com\ibatulanand\inventoryservice\repository\InventoryRepository.class
