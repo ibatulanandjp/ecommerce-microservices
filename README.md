@@ -1,1 +1,1 @@
-# E-commerce Microservices Application
+# Micro Marketplace: An E-commerce Microservices Application
