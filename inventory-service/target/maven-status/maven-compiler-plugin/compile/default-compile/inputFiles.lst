@@ -2,4 +2,5 @@ C:\Personal\Learnings\Code\Projects\new\ecommerce-microservices\inventory-servic
 C:\Personal\Learnings\Code\Projects\new\ecommerce-microservices\inventory-service\src\main\java\com\ibatulanand\inventoryservice\repository\InventoryRepository.java
 C:\Personal\Learnings\Code\Projects\new\ecommerce-microservices\inventory-service\src\main\java\com\ibatulanand\inventoryservice\InventoryServiceApplication.java
 C:\Personal\Learnings\Code\Projects\new\ecommerce-microservices\inventory-service\src\main\java\com\ibatulanand\inventoryservice\model\Inventory.java
+C:\Personal\Learnings\Code\Projects\new\ecommerce-microservices\inventory-service\src\main\java\com\ibatulanand\inventoryservice\dto\InventoryResponse.java
 C:\Personal\Learnings\Code\Projects\new\ecommerce-microservices\inventory-service\src\main\java\com\ibatulanand\inventoryservice\controller\InventoryController.java

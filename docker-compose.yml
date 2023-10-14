@@ -1,7 +1,85 @@
+---
 version: "3"
 services:
+  # MySQL Config for order service
+  mysql-order:
+    container_name: mysql-order
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: order_service
+      MYSQL_USER: ibatulanand
+      MYSQL_PASSWORD: password
+    volumes:
+      - ./mysql_order:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    restart: always
+
+  # MySQL Config for inventory service
+  mysql-inventory:
+    container_name: mysql-inventory
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: inventory_service
+      MYSQL_USER: ibatulanand
+      MYSQL_PASSWORD: password
+    volumes:
+      - ./mysql_inventory:/var/lib/mysql
+    ports:
+      - "3308:3306"
+    restart: always
+
+  # MongoDB Config for product service
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    expose:
+      - "27017"
+    volumes:
+      - ./mongo-data:/data/db
+
+
+  # Keycloak Config (MySQL Database)
+  keycloak-mysql:
+    container_name: keycloak-mysql
+    image: mysql:latest
+    volumes:
+      - ./mysql_keycloak_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: keycloak
+      MYSQL_PASSWORD: password
+
+  # Keycloak Config
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:latest
+    command: [ "start-dev", "--import-realm" ]
+    environment:
+      DB_VENDOR: MYSQL
+      DB_ADDR: mysql
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./realms/:/opt/keycloak/data/import/
+    depends_on:
+      - keycloak-mysql
+
+
+  # Apache Kafka (Zookeeper) Config
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.0.1
+    image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper
     ports:
       - "2181:2181"
@@ -9,8 +87,9 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
+  # Apache Kafka (Broker) Config
   broker:
-    image: confluentinc/cp-kafka:7.0.1
+    image: confluentinc/cp-kafka:latest
     container_name: broker
     ports:
       - "9092:9092"
@@ -24,3 +103,114 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+
+
+  # Zipkin Config
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+
+
+  # Discovery Server (Eureka Server) Config
+  discovery-server:
+    image: ibatulanandjp/discovery-server:latest
+    container_name: discovery-server
+    pull_policy: always
+    ports:
+      - "8761:8761"
+    environment:
+      - SERVER_PORT=8761
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
+    depends_on:
+      - zipkin
+
+  # API Gateway Service Config
+  api-gateway:
+    image: ibatulanandjp/api-gateway:latest
+    container_name: api-gateway
+    pull_policy: always
+    ports:
+      - "8181:8080"
+    expose:
+      - "8181"
+    environment:
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY=TRACE
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka
+      - SERVER_PORT=8080
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUERURI=http://keycloak:8080/realms/spring-boot-microservices-realm
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
+    depends_on:
+      - zipkin
+      - discovery-server
+      - keycloak
+
+  # Product Service Config
+  product-service:
+    container_name: product-service
+    image: ibatulanandjp/product-service:latest
+    pull_policy: always
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/product-service
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - SERVER_PORT=8080
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
+    depends_on:
+      - mongo
+      - zipkin
+      - discovery-server
+      - api-gateway
+
+  # Order Service Config
+  order-service:
+    container_name: order-service
+    image: ibatulanandjp/order-service:latest
+    pull_policy: always
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-order:3306/order_service?allowPublicKeyRetrieval=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=ibatulanand
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SERVER_PORT=8080
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
+      - SPRING_KAFKA_BOOTSTRAPSERVERS=broker:29092
+    depends_on:
+      - mysql-order
+      - broker
+      - zipkin
+      - discovery-server
+      - api-gateway
+
+  # Inventory Service Config
+  inventory-service:
+    container_name: inventory-service
+    image: ibatulanandjp/inventory-service:latest
+    pull_policy: always
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-inventory:3306/inventory_service?allowPublicKeyRetrieval=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=ibatulanand
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SERVER_PORT=8080
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
+    depends_on:
+      - mysql-inventory
+      - zipkin
+      - discovery-server
+      - api-gateway
+
+  # Notification Service Config
+  notification-service:
+    container_name: notification-service
+    image: ibatulanandjp/notification-service:latest
+    pull_policy: always
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=broker:29092
+    depends_on:
+      - broker
+      - zipkin
+      - discovery-server
+      - api-gateway
