@@ -1,8 +1,11 @@
 C:\Personal\Learnings\Code\Projects\new\ecommerce-microservices\order-service\src\main\java\com\ibatulanand\orderservice\repository\OrderRepository.java
+C:\Personal\Learnings\Code\Projects\new\ecommerce-microservices\order-service\src\main\java\com\ibatulanand\orderservice\config\WebClientConfig.java
 C:\Personal\Learnings\Code\Projects\new\ecommerce-microservices\order-service\src\main\java\com\ibatulanand\orderservice\dto\OrderLineItemsDto.java
 C:\Personal\Learnings\Code\Projects\new\ecommerce-microservices\order-service\src\main\java\com\ibatulanand\orderservice\controller\OrderController.java
+C:\Personal\Learnings\Code\Projects\new\ecommerce-microservices\order-service\src\main\java\com\ibatulanand\orderservice\dto\InventoryResponse.java
 C:\Personal\Learnings\Code\Projects\new\ecommerce-microservices\order-service\src\main\java\com\ibatulanand\orderservice\dto\OrderRequest.java
 C:\Personal\Learnings\Code\Projects\new\ecommerce-microservices\order-service\src\main\java\com\ibatulanand\orderservice\service\OrderService.java
 C:\Personal\Learnings\Code\Projects\new\ecommerce-microservices\order-service\src\main\java\com\ibatulanand\orderservice\model\OrderLineItems.java
 C:\Personal\Learnings\Code\Projects\new\ecommerce-microservices\order-service\src\main\java\com\ibatulanand\orderservice\model\Order.java
 C:\Personal\Learnings\Code\Projects\new\ecommerce-microservices\order-service\src\main\java\com\ibatulanand\orderservice\OrderServiceApplication.java
+C:\Personal\Learnings\Code\Projects\new\ecommerce-microservices\order-service\src\main\java\com\ibatulanand\orderservice\event\OrderPlacedEvent.java

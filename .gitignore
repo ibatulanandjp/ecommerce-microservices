@@ -24,17 +24,6 @@ hs_err_pid*
 replay_pid*
 /.metadata/
 
-# IntelliJ Idea
-.idea
-*.iws
-*.iml
-*.ipr
-
-HELP.md
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
 
 # STS
 .apt_generated
@@ -43,3 +32,18 @@ target/
 .project
 .settings
 .springBeans
+
+# IntelliJ Idea
+.idea
+*.iws
+*.iml
+*.ipr
+
+HELP.md
+**/target/
+
+### My SQL Host Data ###
+/mysql_order
+/mysql_inventory
+/mongo-data
+/mysql_keycloak_data
