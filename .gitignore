@@ -50,3 +50,4 @@ HELP.md
 /mysql_inventory
 /mongo-data
 /mysql_keycloak_data
+/grafana_data
