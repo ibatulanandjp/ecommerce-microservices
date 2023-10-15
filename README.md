@@ -11,7 +11,7 @@ With a focus on scalability, resilience, and real-time interaction, Micro Market
 
 
 ### Solution Architecture
-![Solution Architecture](docs/images/architecture/Architecture.png)
+![Solution Architecture](docs/images/architecture/SolutionArchitecture.png)
 
 ### Services
 - **Product Service:** Responsible for managing product information, including creation, retrieval, and updates. It uses a MongoDB database.
