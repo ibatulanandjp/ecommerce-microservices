@@ -45,9 +45,12 @@ HELP.md
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### My SQL Host Data ###
+# Data
 /mysql_order
 /mysql_inventory
 /mongo-data
 /mysql_keycloak_data
 /grafana_data
+
+# Draw.io
+*.drawio
